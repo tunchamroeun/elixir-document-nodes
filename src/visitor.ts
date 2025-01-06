@@ -7,23 +7,23 @@ import {
 } from "@graphql-codegen/visitor-plugin-common";
 import autoBind from "auto-bind";
 import { GraphQLSchema } from "graphql";
-import { TypeScriptDocumentNodesRawPluginConfig } from "./index.js";
+import { ElixirDocumentNodesRawPluginConfig } from "./index.js";
 import { ClientSideBaseVisitor } from "./client-side-base-visitor";
 
-export interface TypeScriptDocumentNodesPluginConfig
+export interface ElixirDocumentNodesPluginConfig
   extends ClientSideBasePluginConfig {
   namingConvention: NamingConvention;
   transformUnderscore: boolean;
 }
 
-export class TypeScriptDocumentNodesVisitor extends ClientSideBaseVisitor<
-  TypeScriptDocumentNodesRawPluginConfig,
-  TypeScriptDocumentNodesPluginConfig
+export class ElixirDocumentNodesVisitor extends ClientSideBaseVisitor<
+  ElixirDocumentNodesRawPluginConfig,
+  ElixirDocumentNodesPluginConfig
 > {
   constructor(
     schema: GraphQLSchema,
     fragments: LoadedFragment[],
-    rawConfig: TypeScriptDocumentNodesRawPluginConfig,
+    rawConfig: ElixirDocumentNodesRawPluginConfig,
     documents: Types.DocumentFile[]
   ) {
     const additionalConfig = {

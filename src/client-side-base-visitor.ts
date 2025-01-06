@@ -534,9 +534,12 @@ export class ClientSideBaseVisitor<
       return `new TypedDocumentString(\`${doc}\`)`;
     }
 
-    const gqlImport = this._parseImport(this.config.gqlImport || "graphql-tag");
-
-    return (gqlImport.propName || "gql") + "`" + doc + "`";
+    const newDoc = doc
+      .trim()
+      .split("\n")
+      .map((line) => `  ${line}`)
+      .join("\n");
+    return `\n  """\n${newDoc}\n  """\n`;
   }
 
   protected _getGraphQLCodegenMetadata(
@@ -857,7 +860,7 @@ export class ClientSideBaseVisitor<
       return ` as unknown as DocumentNode`;
     }
 
-    return "";
+    return "end";
   }
 
   /**
@@ -910,15 +913,17 @@ export class ClientSideBaseVisitor<
       this.config.documentMode !== DocumentMode.external &&
       documentVariableName !== "" // only generate exports for named queries
     ) {
-      documentString = `${
-        this.config.noExport ? "" : "export"
-      } const ${documentVariableName} =${
-        this.config.pureMagicComment ? " /*#__PURE__*/" : ""
-      } ${this._gql(node)}${this.getDocumentNodeSignature(
+      documentString = `def ${documentVariableName}() do ${this._gql(
+        node
+      )}${this.getDocumentNodeSignature(
         operationResultType,
         operationVariablesTypes,
         node
-      )};`;
+      )}`
+        .trim()
+        .split("\n")
+        .map((line) => `  ${line}`)
+        .join("\n");
     }
 
     const hasRequiredVariables = this.checkVariablesRequirements(node);

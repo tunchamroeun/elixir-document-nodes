@@ -16,13 +16,18 @@ import {
   GraphQLSchema,
   Kind,
 } from "graphql";
-import { TypeScriptDocumentNodesVisitor } from "./visitor.js";
+import { ElixirDocumentNodesVisitor } from "./visitor.js";
 
 /**
- * @description This plugin generates TypeScript source `.ts` file from GraphQL files `.graphql`.
+ * @description This plugin generates Elixir source `.ex` file from GraphQL files `.graphql`.
  */
-export interface TypeScriptDocumentNodesRawPluginConfig
+export interface ElixirDocumentNodesRawPluginConfig
   extends RawClientSideBasePluginConfig {
+  /**
+   * @description The name of the Elixir module to be generated
+   * @default "Generated.GraphQL"
+   */
+  moduleName?: string;
   /**
    * @default change-case-all#pascalCase
    * @description Allow you to override the naming convention of the output.
@@ -174,10 +179,10 @@ export interface TypeScriptDocumentNodesRawPluginConfig
   fragmentSuffix?: string;
 }
 
-export const plugin: PluginFunction<TypeScriptDocumentNodesRawPluginConfig> = (
+export const plugin: PluginFunction<ElixirDocumentNodesRawPluginConfig> = (
   schema: GraphQLSchema,
   documents: Types.DocumentFile[],
-  config: TypeScriptDocumentNodesRawPluginConfig
+  config: ElixirDocumentNodesRawPluginConfig
 ) => {
   const allAst = concatAST(
     documents
@@ -199,7 +204,7 @@ export const plugin: PluginFunction<TypeScriptDocumentNodesRawPluginConfig> = (
     ...(config.externalFragments || []),
   ];
 
-  const visitor = new TypeScriptDocumentNodesVisitor(
+  const visitor = new ElixirDocumentNodesVisitor(
     schema,
     allFragments,
     config,
@@ -207,12 +212,17 @@ export const plugin: PluginFunction<TypeScriptDocumentNodesRawPluginConfig> = (
   );
   const visitorResult = oldVisit(allAst, { leave: visitor as any });
 
+  const content = [
+    visitor.fragments,
+    ...visitorResult.definitions.filter((t: any) => typeof t === "string"),
+  ].join("\n");
+  const elixirModule = `defmodule ${
+    config.moduleName ?? "Generated.GraphQL"
+  } do\n  @doc "Generated GraphQL queries"
+  ${content}
+  \nend`;
   return {
-    prepend: visitor.getImports(),
-    content: [
-      visitor.fragments,
-      ...visitorResult.definitions.filter((t: any) => typeof t === "string"),
-    ].join("\n"),
+    content: elixirModule,
   };
 };
 
