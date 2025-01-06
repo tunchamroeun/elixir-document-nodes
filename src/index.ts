@@ -11,6 +11,7 @@ import {
 } from "@graphql-codegen/visitor-plugin-common";
 import {
   concatAST,
+  DocumentNode,
   FragmentDefinitionNode,
   GraphQLSchema,
   Kind,
@@ -178,7 +179,11 @@ export const plugin: PluginFunction<TypeScriptDocumentNodesRawPluginConfig> = (
   documents: Types.DocumentFile[],
   config: TypeScriptDocumentNodesRawPluginConfig
 ) => {
-  const allAst = concatAST(documents.map((v) => v.document));
+  const allAst = concatAST(
+    documents
+      .map((v) => v.document)
+      .filter((doc): doc is DocumentNode => doc !== undefined)
+  );
 
   const allFragments: LoadedFragment[] = [
     ...(
@@ -200,13 +205,13 @@ export const plugin: PluginFunction<TypeScriptDocumentNodesRawPluginConfig> = (
     config,
     documents
   );
-  const visitorResult = oldVisit(allAst, { leave: visitor });
+  const visitorResult = oldVisit(allAst, { leave: visitor as any });
 
   return {
     prepend: visitor.getImports(),
     content: [
       visitor.fragments,
-      ...visitorResult.definitions.filter((t) => typeof t === "string"),
+      ...visitorResult.definitions.filter((t: any) => typeof t === "string"),
     ].join("\n"),
   };
 };
