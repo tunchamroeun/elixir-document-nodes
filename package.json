@@ -11,7 +11,11 @@
     "build": "tsc",
     "prepare": "npm run build",
     "test": "jest",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "version:commit": "git add . && git commit -m \"v$npm_package_version\" && git tag v$npm_package_version && git push && git push --tags",
+    "publish:patch": "pnpm build && pnpm version patch && pnpm version:commit && pnpm publish --no-git-checks",
+    "publish:minor": "pnpm build && pnpm version minor && pnpm version:commit && pnpm publish --no-git-checks",
+    "publish:major": "pnpm build && pnpm version major && pnpm version:commit && pnpm publish --no-git-checks"
   },
   "dependencies": {
     "@graphql-codegen/plugin-helpers": "^5.1.0",

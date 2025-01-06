@@ -222,9 +222,9 @@ export const validate: PluginValidateFn<any> = async (
   config: any,
   outputFile: string
 ) => {
-  if (!outputFile.endsWith(".ts")) {
+  if (!outputFile.endsWith(".ex")) {
     throw new Error(
-      `Plugin "typescript-document-nodes" requires extension to be ".ts"!`
+      `Plugin "elixir-document-nodes" requires extension to be ".ex"!`
     );
   }
 };
