@@ -1,7 +1,6 @@
 import { Types } from "@graphql-codegen/plugin-helpers";
 import {
   ClientSideBasePluginConfig,
-  ClientSideBaseVisitor,
   getConfigValue,
   LoadedFragment,
   NamingConvention,
@@ -9,6 +8,7 @@ import {
 import autoBind from "auto-bind";
 import { GraphQLSchema } from "graphql";
 import { TypeScriptDocumentNodesRawPluginConfig } from "./index.js";
+import { ClientSideBaseVisitor } from "./client-side-base-visitor";
 
 export interface TypeScriptDocumentNodesPluginConfig
   extends ClientSideBasePluginConfig {

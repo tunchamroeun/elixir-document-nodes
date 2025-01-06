@@ -217,9 +217,9 @@ export const plugin: PluginFunction<TypeScriptDocumentNodesRawPluginConfig> = (
 };
 
 export const validate: PluginValidateFn<any> = async (
-  schema: GraphQLSchema,
-  documents: Types.DocumentFile[],
-  config: any,
+  _schema: GraphQLSchema,
+  _documents: Types.DocumentFile[],
+  _config: any,
   outputFile: string
 ) => {
   if (!outputFile.endsWith(".ex")) {
