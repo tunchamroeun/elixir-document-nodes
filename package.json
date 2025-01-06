@@ -1,6 +1,6 @@
 {
   "name": "elixir-document-nodes",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "GraphQL Code Generator plugin for generating Elixir modules with embedded GraphQL document nodes",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
     "prepare": "npm run build",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "version:commit": "git add . && git commit -m \"v$npm_package_version\" && git tag v$npm_package_version && git push && git push --tags",
+    "version:commit": "git add . && git commit -m \"v$npm_package_version\" && git push",
     "publish:patch": "npm run build && npm version patch --no-git-tag-version && npm run version:commit && npm publish --no-git-tag-version",
     "publish:minor": "npm run build && npm version minor --no-git-tag-version && npm run version:commit && npm publish --no-git-tag-version",
     "publish:major": "npm run build && npm version major --no-git-tag-version && npm run version:commit && npm publish --no-git-tag-version"
