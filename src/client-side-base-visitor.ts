@@ -411,7 +411,7 @@ export class ClientSideBaseVisitor<
       if (this.config.dedupeFragments && nodeKind !== "OperationDefinition") {
         return "";
       }
-      return String(fragments.map((name) => "${" + name + "}").join("\n"));
+      return String(fragments.map((name) => "#{" + name + "()}").join("\n"));
     }
 
     return "";
@@ -604,9 +604,9 @@ export class ClientSideBaseVisitor<
   ): string | void {
     const name = this.getFragmentVariableName(fragmentDocument);
     const fragmentTypeSuffix = this.getFragmentSuffix(fragmentDocument);
-    return `export const ${name} =${
-      this.config.pureMagicComment ? " /*#__PURE__*/" : ""
-    } ${this._gql(fragmentDocument)}${this.getDocumentNodeSignature(
+    return `def ${name}() do ${this._gql(
+      fragmentDocument
+    )}${this.getDocumentNodeSignature(
       this.convertName(fragmentDocument.name.value, {
         useTypesPrefix: true,
         suffix: fragmentTypeSuffix,
@@ -617,7 +617,11 @@ export class ClientSideBaseVisitor<
           })
         : "unknown",
       fragmentDocument
-    )};`;
+    )}`
+      .trim()
+      .split("\n")
+      .map((line) => `  ${line}`)
+      .join("\n");
   }
 
   private _getFragmentsGraph(): DepGraph<LoadedFragment> {

@@ -9,13 +9,13 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
+    "prepare": "pnpm run build",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "version:commit": "git add . && git commit -m \"v$npm_package_version\" && git push",
-    "publish:patch": "npm run build && npm version patch --no-git-tag-version && npm run version:commit && npm publish --no-git-tag-version",
-    "publish:minor": "npm run build && npm version minor --no-git-tag-version && npm run version:commit && npm publish --no-git-tag-version",
-    "publish:major": "npm run build && npm version major --no-git-tag-version && npm run version:commit && npm publish --no-git-tag-version"
+    "publish:patch": "pnpm run build && pnpm version patch --no-git-tag-version && pnpm run version:commit && pnpm publish --no-git-tag-version",
+    "publish:minor": "pnpm run build && pnpm version minor --no-git-tag-version && pnpm run version:commit && pnpm publish --no-git-tag-version",
+    "publish:major": "pnpm run build && pnpm version major --no-git-tag-version && pnpm run version:commit && pnpm publish --no-git-tag-version"
   },
   "dependencies": {
     "@graphql-codegen/plugin-helpers": "^5.1.0",

@@ -140,11 +140,11 @@ end
 ## Running Code Generation
 
 ```bash
-# Using npx
-npx graphql-codegen
+# Using pnpm
+pnpm exec graphql-codegen
 
 # Or if you have it in your package.json scripts
-npm run codegen
+pnpm run codegen
 ```
 
 ## License
